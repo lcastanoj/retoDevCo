@@ -1,8 +1,8 @@
-group 'org.example'
-version '1.0-SNAPSHOT'
-defaultTasks 'clean', 'test', 'aggregate'
+apply plugin: 'java-library'
+apply plugin: 'net.serenity-bdd.aggregator'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -13,40 +13,30 @@ buildscript {
         }
     }
     dependencies {
-        classpath "net.serenity-bdd:serenity-gradle-plugin:3.5.0"
+        classpath "net.serenity-bdd:serenity-gradle-plugin:3.2.0"
     }
 }
 
-apply plugin: 'java'
-apply plugin: "net.serenity-bdd.serenity-gradle-plugin"
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-ext {
-    slf4jVersion = '1.7.7'
-    serenityCoreVersion = '3.5.0'
-    junitVersion = '4.12'
-    assertJVersion = '3.22.0'
-    logbackVersion = '1.2.10'
+dependencies {
+    implementation "net.serenity-bdd:serenity-core:3.2.0"
+    implementation "net.serenity-bdd:serenity-junit:3.2.0"
+    implementation 'net.serenity-bdd:serenity-screenplay:3.2.0'
+    implementation "net.serenity-bdd:serenity-cucumber:3.2.0"
+    implementation "org.junit.jupiter:junit-jupiter-api:5.8.1"
+    implementation "org.junit.jupiter:junit-jupiter-engine:5.8.1"
+    implementation "org.assertj:assertj-core:3.8.0"
+    implementation group: 'org.apache.poi', name: 'poi', version: '3.17'
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+    implementation 'org.slf4j:slf4j-simple:1.7.7'
+    implementation "net.serenity-bdd:serenity-ensure:3.2.0"
+}
+test.finalizedBy(aggregate)
+test {
+    ignoreFailures = true
 }
 
-dependencies {
-    implementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenityCoreVersion}",
-            "ch.qos.logback:logback-classic:${logbackVersion}"
-
-    testImplementation "net.serenity-bdd:serenity-core:${serenityCoreVersion}",
-            "net.serenity-bdd:serenity-junit:${serenityCoreVersion}",
-            "net.serenity-bdd:serenity-screenplay:${serenityCoreVersion}",
-            "net.serenity-bdd:serenity-ensure:${serenityCoreVersion}",
-            "net.serenity-bdd:serenity-cucumber:${serenityCoreVersion}",
-            "junit:junit:${junitVersion}",
-            "org.assertj:assertj-core:${assertJVersion}"
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 gradle.startParameter.continueOnFailure = true
-
-test.finalizedBy(aggregate)
-
