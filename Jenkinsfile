@@ -30,7 +30,7 @@ pipeline {
         stage('Pruebas') {
             steps {
             echo 'Se realizan pruebas manuales y automatizadas para identificar errores y problemas. Esto asegura la calidad del software antes de su publicación. Se utilizan herramientas como Selenium y JUnit.'
-                bat 'gradle test --tests *KarateRunner'
+                bat 'gradle test'
             }
         }
         stage('Lanzamiento') {
