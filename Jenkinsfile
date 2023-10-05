@@ -1,8 +1,6 @@
 pipeline {
 
-    agent {
-        label 'SQA_AGENTS'
-    }
+    agent any
 
     stages {
         stage('Build') {
